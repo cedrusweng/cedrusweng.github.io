@@ -66,6 +66,90 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/" class="article-date">
+  <time datetime="2016-06-13T05:52:38.230Z" itemprop="datePublished">2016-06-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>ES5引入Object.getPrototypeOf函数作为获取对象原型的标准API，但由于之前的很多js引擎使用了一个特殊的<strong>proto</strong>属性来达到相同的目的。但有些浏览器并不支持这个<strong>proto</strong>属性，所以并不是完全兼容的。<br>例如对于拥有null原型的对象，不同的环境结果就不同了。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> empty=<span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br><span class="line"><span class="string">'__proto__'</span> <span class="keyword">in</span> empty;<span class="comment">//一些环境会返回false,另一些会返回true</span></span><br></pre></td></tr></table></figure></p>
+<p>这就导致结果的不一致，从而影响到依赖这个判断的相关代码。<br>无论在什么情况下，Object.getPrototypeOf函数都是有效的，而且它是提取对象原型更加标准、可移植的方法。由于<strong>ptoto</strong>属性会污染所有的对象，因此它会导致大量的bug。<br>对于一些没有提供该ES5 api的js环境，可以很容易利用<strong>proto</strong>属性来实现Object.getPrototypeOf函数。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="built_in">Object</span>.getPrototypeOf === <span class="string">'undefined'</span>)&#123;</span><br><span class="line">    <span class="built_in">Object</span>.getPrototypeOf=<span class="function"><span class="keyword">function</span>(<span class="params">obj</span>)</span>&#123;</span><br><span class="line">         <span class="keyword">var</span> t=<span class="keyword">typeof</span> obj;</span><br><span class="line">         <span class="keyword">if</span>(!obj || (t !== <span class="string">'object'</span> &amp;&amp; t !== <span class="string">'function'</span>))&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"不是一个对象！"</span>);</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> obj.__proto__;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码对宿主环境是否实现Object.getPrototypeOf函数进行判断，在ES5标准的环境中也很安全。</p>
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>使用符合标准的Object.getPrototypeOf函数而不要使用非标准的<strong>proto</strong>属性</li>
+<li>在支持<strong>proto</strong>属性的非ES5环境中实现Object.getPrototypeOf函数</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://cedrusweng.github.io/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/" data-id="cipdmwgbt0003o0ci2k45q9on" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/" class="article-date">
+  <time datetime="2016-06-13T01:42:15.627Z" itemprop="datePublished">2016-06-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>原型包括三个独立但相关的访问器。这三个单词都是对单词prototype做了一些变化。</p>
+<ul>
+<li>C.prototype用于建立由new C()创建的对象的原型</li>
+<li>Object.getPrototypeOf(obj)是ES5中用来获取obj对象的原型对象的标准方法</li>
+<li>obj.<strong>proto</strong>是获取obj对象的原型对象的非标准方法<h2 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h2>要理解这些访问器，我们拿一个典型的js数据类型作例子。<br>假设User构造函数需要通过new操作符来调用。它需要两个参数，即姓名和密码的哈希值，并将它们存储在创建的对象中。<br>代码如下：<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,pwd</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">this</span>.name=name;</span><br><span class="line">	<span class="keyword">this</span>.pwd=pwd;</span><br><span class="line">&#125;</span><br><span class="line">User.prototype.toString=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="string">'[User '</span>+<span class="keyword">this</span>.name+<span class="string">']'</span>;</span><br><span class="line">&#125;</span><br><span class="line">User.prototype.checkPwd=<span class="function"><span class="keyword">function</span>(<span class="params">pwd</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> hash(pwd)===<span class="keyword">this</span>.pwd;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> u=<span class="keyword">new</span> User(<span class="string">'cedrusweng'</span>,<span class="string">'$sdf99kaslf7'</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>根据上面的这个代码我们可以画出下面这个图，以表示各种关系。<br>我们每次在使用<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Fn</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>相当于调用下面这样<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fn=<span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">"函数体"</span>[,参数]);</span><br></pre></td></tr></table></figure></p>
+<p>其中Function是一个构造函数，它的原型对象中包含我们之前讲到过的call、apply、bind等属性和方法。fn是Function的一个实例对象。<br>所以这里的可以得到第一部分的图</p>
+<p>下面再就构造函数User和它的原型对象之间的关系画出一个图</p>
+<p>User函数带有一个默认的prototype的属性，其包含一个开始几乎为空的对象。上面的例子中添加了两个方法到原型对象中。当使用new操作符创建User的实例时，产生的对象u得到了自动分配的原型对象，该原型对象被存储在User.prototype中。</p>
+<p>最后来一张完整的图</p>
+<p>注意：new操作符调用构造函数，会产生一个新的对象实例，这个对象是以构造函数为模板，创建一份私有的性属性和方法，所有的实例都会继承原型对象。当访问u.name时，u对象会首先在它的私有属性中进行搜索，如果有则会返回，如果没有，则会查找对象的原型对象。当访问u.checkPwd时，私有属性和方法不存在时，会返回存储在User.prototype中的方法。</p>
+<h2 id="原型有关的方法"><a href="#原型有关的方法" class="headerlink" title="原型有关的方法"></a>原型有关的方法</h2><p>首先，构造函数的prototype属性用来设置新实例的原型关系。<br>其次，ES5中的函数Object.getPrototypeOf()可以用于检索现有对象的原型。<br>如上面的例子，可以使用下面代码来检测对象u的原型对象。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getPrototypeOf(u)===User.prototype;<span class="comment">//true</span></span><br></pre></td></tr></table></figure></p>
+<p>最后，一些环境提供了非标准的方法检索对象的原型，即特殊的<strong>proto</strong>属性。这可作为在不支持ES5的Object.getPrototypeOf方法的环境中的一个兼容方法。在这些环境中可以使用下面代码完成检测<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">u.__proto__===User.prototype;<span class="comment">//true</span></span><br></pre></td></tr></table></figure></p>
+<p>下面画一张图，表明它们之间的关系</p>
+<h2 id="最后的说明"><a href="#最后的说明" class="headerlink" title="最后的说明"></a>最后的说明</h2><p>js程序员往往将User描述为一个类，尽管它跟一个函数差不多。js中的类本质上是一个构造函数与一个用于类（User.prototype）实例间共享方法的原型对象的结合。<br>下面是一个User类的概念图。</p>
+<p>User函数给该类提供了一个公共的构造函数，而User.prototype是实例之间共享方法的一个内部实现。User和u的变通用法都不需要直接访问原型对象。</p>
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>C.prototype属性是new C()创建的对象的原型</li>
+<li>Object.getPrototypeOf(obj)是ES5中检索对象原型的标准函数</li>
+<li>obj.<strong>proto</strong>是检索对象原型的非标准方法</li>
+<li>类是由一个构造函数和一个关联的原型组成的一种设计模式</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://cedrusweng.github.io/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/" data-id="cipdmwgbn0001o0ciz0g0idqp" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-html-commet" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/05/31/html-commet/" class="article-date">
@@ -96,7 +180,7 @@
 <h3 id="2、说明功能模块及使用方法"><a href="#2、说明功能模块及使用方法" class="headerlink" title="2、说明功能模块及使用方法"></a>2、说明功能模块及使用方法</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 激活状态类：active,默认状态类：default,无法使用状态类:disabled --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"active"</span>&gt;</span>激活<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"default"</span>&gt;</span>默认<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"disabled"</span>&gt;</span>无法使用<span class="tag">&lt;/<span class="name">li</span>&gt;</span><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h3 id="3、对于页面制作的备注"><a href="#3、对于页面制作的备注" class="headerlink" title="3、对于页面制作的备注"></a>3、对于页面制作的备注</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 此页面创建于2016/5/31,前端：李四,设计：王五 --&gt;</span></span><br></pre></td></tr></table></figure>
 <p>以上3种应用都是基于注释的说明作用，利用其在浏览器上不显示的特性，对文档进行说明，方便工作中跨组跨部门的沟通。</p>
-<h3 id="4、页内CSS-JS的作用"><a href="#4、页内CSS-JS的作用" class="headerlink" title="4、页内CSS/JS的作用"></a>4、页内CSS/JS的作用</h3><p>用于兼容老版的浏览器，对于js和css还无法识别。（只用于了解，现在基本可以放弃使用这个功能了），代码如下<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span><br><span class="line">.good&#123;color:red;&#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined">alert('good')</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>morning<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="4、页内CSS-JS的作用"><a href="#4、页内CSS-JS的作用" class="headerlink" title="4、页内CSS/JS的作用"></a>4、页内CSS/JS的作用</h3><p>用于兼容老版的浏览器，对于js和css还无法识别。（只用于了解，现在基本可以放弃使用这个功能了），代码如下<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"></span><br><span class="line"><span class="selector-class">.good</span>&#123;<span class="attribute">color</span>:red;&#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="string">'good'</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>morning<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>上面的代码会直接显示在页面<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.good&#123;color:red;&#125;alert('good')</span><br><span class="line">morning</span><br></pre></td></tr></table></figure></p>
 <p>可以使用注释，以防止代码显示，影响页面体验。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="xml"></span><br><span class="line"><span class="comment">&lt;!--</span><br><span class="line">.good&#123;color:red;&#125;</span><br><span class="line">--&gt;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="xml"></span><br><span class="line"><span class="comment">&lt;!--</span><br><span class="line">alert('good')</span><br><span class="line">//--&gt;</span></span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>morning<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>此处理还使用了//,是javascript的注释符号，防止js对–&gt;执行。</p>
@@ -137,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/05/31/html-commet/" data-id="ciov97twl0000ogcif9c2fvp2" class="article-share-link">Share</a>
+      <a data-url="http://cedrusweng.github.io/2016/05/31/html-commet/" data-id="cipdmwgbw0005o0cigvomaeuw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/聊一聊HTML标签/">聊一聊HTML标签</a></li></ul>
@@ -195,7 +279,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/05/30/html-pre/" data-id="ciov97twz0003ogci7b4bkwev" class="article-share-link">Share</a>
+      <a data-url="http://cedrusweng.github.io/2016/05/30/html-pre/" data-id="cipdmwgbv0004o0cic8wnwsyj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/聊一聊HTML标签/">聊一聊HTML标签</a></li></ul>
@@ -242,7 +326,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/05/27/第15条：当心局部块函数声明笨拙的作用域/" data-id="ciov97twt0001ogcifzjv3h0l" class="article-share-link">Share</a>
+      <a data-url="http://cedrusweng.github.io/2016/05/27/第15条：当心局部块函数声明笨拙的作用域/" data-id="cipdmwgbh0000o0ciqaoum4n6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
@@ -285,7 +369,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
   </div>
 
@@ -296,6 +380,14 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2016/05/31/html-commet/">聊一聊HTML &lt;!--...--&gt;标签</a>
