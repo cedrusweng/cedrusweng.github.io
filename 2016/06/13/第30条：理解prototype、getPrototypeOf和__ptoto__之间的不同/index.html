@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>脚后跟着猫</title>
+  <title>第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同 | 脚后跟着猫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="原型包括三个独立但相关的访问器。这三个单词都是对单词prototype做了一些变化。
 
@@ -11,7 +11,7 @@ C.prototype用于建立由new C()创建的对象的原型
 Object.getPrototypeOf(obj)是ES5中用来获取obj对象的原型对象的标准方法
 obj.proto是获取obj对象的原型对象的非标准方法一个例子要理解这些访问器，我们拿一个典型的js数据类型作例子。假设User构造函数需要通过">
 <meta property="og:type" content="article">
-<meta property="og:title" content="脚后跟着猫">
+<meta property="og:title" content="第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同">
 <meta property="og:url" content="http://cedrusweng.github.io/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/index.html">
 <meta property="og:site_name" content="脚后跟着猫">
 <meta property="og:description" content="原型包括三个独立但相关的访问器。这三个单词都是对单词prototype做了一些变化。
@@ -19,9 +19,9 @@ obj.proto是获取obj对象的原型对象的非标准方法一个例子要理�
 C.prototype用于建立由new C()创建的对象的原型
 Object.getPrototypeOf(obj)是ES5中用来获取obj对象的原型对象的标准方法
 obj.proto是获取obj对象的原型对象的非标准方法一个例子要理解这些访问器，我们拿一个典型的js数据类型作例子。假设User构造函数需要通过">
-<meta property="og:updated_time" content="2016-06-13T03:32:36.122Z">
+<meta property="og:updated_time" content="2016-06-13T06:26:40.560Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="脚后跟着猫">
+<meta name="twitter:title" content="第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同">
 <meta name="twitter:description" content="原型包括三个独立但相关的访问器。这三个单词都是对单词prototype做了一些变化。
 
 C.prototype用于建立由new C()创建的对象的原型
@@ -87,6 +87,16 @@ obj.proto是获取obj对象的原型对象的非标准方法一个例子要理�
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
         <p>原型包括三个独立但相关的访问器。这三个单词都是对单词prototype做了一些变化。</p>
@@ -114,13 +124,16 @@ obj.proto是获取obj对象的原型对象的非标准方法一个例子要理�
 <li>obj.<strong>proto</strong>是检索对象原型的非标准方法</li>
 <li>类是由一个构造函数和一个关联的原型组成的一种设计模式</li>
 </ul>
+<p>function createFn(a)<br>    var fn;<br>    if(a){<br>       fn=function(){console.log(1)}<br>    }else{<br>       fn=function(){console.log(2)}<br>    }<br>    return fn;</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/" data-id="cipdmwgbn0001o0ciz0g0idqp" class="article-share-link">Share</a>
+      <a data-url="http://cedrusweng.github.io/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/" data-id="cipdn0hkh0003ucci6n2ixnaq" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
+
     </footer>
   </div>
   
@@ -131,7 +144,7 @@ obj.proto是获取obj对象的原型对象的非标准方法一个例子要理�
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          (no title)
+          第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性
         
       </div>
     </a>
@@ -168,7 +181,7 @@ obj.proto是获取obj对象的原型对象的非标准方法一个例子要理�
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/编写高质量javascript代码的68条有效方法/" style="font-size: 10px;">编写高质量javascript代码的68条有效方法</a> <a href="/tags/聊一聊HTML标签/" style="font-size: 20px;">聊一聊HTML标签</a>
+      <a href="/tags/编写高质量javascript代码的68条有效方法/" style="font-size: 20px;">编写高质量javascript代码的68条有效方法</a> <a href="/tags/聊一聊HTML标签/" style="font-size: 10px;">聊一聊HTML标签</a>
     </div>
   </div>
 
@@ -190,11 +203,11 @@ obj.proto是获取obj对象的原型对象的非标准方法一个例子要理�
       <ul>
         
           <li>
-            <a href="/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/">(no title)</a>
+            <a href="/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/">第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性</a>
           </li>
         
           <li>
-            <a href="/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/">(no title)</a>
+            <a href="/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/">第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同</a>
           </li>
         
           <li>
