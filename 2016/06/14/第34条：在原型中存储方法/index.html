@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>脚后跟着猫</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="js中完全有可能不借助原型进行编程。不用在其原型中定义任何的方法。
+创建对象构造函数法所有属性和方法都在构造函数中定义12345678910function User(name,pwd)&amp;#123;  this.name=name;  this.pwd=pwd;  this.toString=function()&amp;#123;      return &apos;[User &apos;+this.name+&apos;]&apos;;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="脚后跟着猫">
+<meta property="og:url" content="http://cedrusweng.github.io/2016/06/14/第34条：在原型中存储方法/index.html">
+<meta property="og:site_name" content="脚后跟着猫">
+<meta property="og:description" content="js中完全有可能不借助原型进行编程。不用在其原型中定义任何的方法。
+创建对象构造函数法所有属性和方法都在构造函数中定义12345678910function User(name,pwd)&amp;#123;  this.name=name;  this.pwd=pwd;  this.toString=function()&amp;#123;      return &apos;[User &apos;+this.name+&apos;]&apos;;">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/156514/201606/156514-20160614181104901-1601623793.jpg">
+<meta property="og:image" content="http://images2015.cnblogs.com/blog/156514/201606/156514-20160614181105838-174623671.jpg">
+<meta property="og:updated_time" content="2016-06-14T10:18:07.196Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="脚后跟着猫">
+<meta name="twitter:description" content="js中完全有可能不借助原型进行编程。不用在其原型中定义任何的方法。
+创建对象构造函数法所有属性和方法都在构造函数中定义12345678910function User(name,pwd)&amp;#123;  this.name=name;  this.pwd=pwd;  this.toString=function()&amp;#123;      return &apos;[User &apos;+this.name+&apos;]&apos;;">
+<meta name="twitter:image" content="http://images2015.cnblogs.com/blog/156514/201606/156514-20160614181104901-1601623793.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="脚后跟着猫" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">脚后跟着猫</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/scrollFrame">scrollFrame</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://cedrusweng.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-第34条：在原型中存储方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/14/第34条：在原型中存储方法/" class="article-date">
+  <time datetime="2016-06-14T03:18:08.603Z" itemprop="datePublished">2016-06-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>js中完全有可能不借助原型进行编程。不用在其原型中定义任何的方法。</p>
+<h2 id="创建对象"><a href="#创建对象" class="headerlink" title="创建对象"></a>创建对象</h2><h3 id="构造函数法"><a href="#构造函数法" class="headerlink" title="构造函数法"></a>构造函数法</h3><p>所有属性和方法都在构造函数中定义<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,pwd</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name=name;</span><br><span class="line">  <span class="keyword">this</span>.pwd=pwd;</span><br><span class="line">  <span class="keyword">this</span>.toString=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">'[User '</span>+<span class="keyword">this</span>.name+<span class="string">']'</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">this</span>.checkPwd=<span class="function"><span class="keyword">function</span>(<span class="params">pwd</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> hash(pwd)===<span class="keyword">this</span>.pwd;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样创建没有什么问题，但这里当我们构造多个User实例的时候，会占用过多的内存空间。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> u1=<span class="keyword">new</span> User(<span class="comment">/* 一些参数 */</span>);</span><br><span class="line"><span class="keyword">var</span> u2=<span class="keyword">new</span> User(<span class="comment">/* 一些参数 */</span>);</span><br><span class="line"><span class="keyword">var</span> u3=<span class="keyword">new</span> User(<span class="comment">/* 一些参数 */</span>);</span><br></pre></td></tr></table></figure></p>
+<p>可以从下面的图里看出它们在内存中的情况。<br><img src="http://images2015.cnblogs.com/blog/156514/201606/156514-20160614181104901-1601623793.jpg" alt="方法存储在实例中" title="1465889655223.jpg"></p>
+<h3 id="原型和构造函数相结合"><a href="#原型和构造函数相结合" class="headerlink" title="原型和构造函数相结合"></a>原型和构造函数相结合</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">User</span>(<span class="params">name,pwd</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name=name;</span><br><span class="line">  <span class="keyword">this</span>.pwd=pwd;</span><br><span class="line">  <span class="keyword">this</span>.toString=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="string">'[User '</span>+<span class="keyword">this</span>.name+<span class="string">']'</span>;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">this</span>.checkPwd=<span class="function"><span class="keyword">function</span>(<span class="params">pwd</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> hash(pwd)===<span class="keyword">this</span>.pwd;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">User.prototype.toString=<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'[User '</span>+<span class="keyword">this</span>.name+<span class="string">']'</span>;</span><br><span class="line">&#125;;</span><br><span class="line">User.prototype.checkPwd=<span class="function"><span class="keyword">function</span>(<span class="params">pwd</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">return</span> hash(pwd)===<span class="keyword">this</span>.pwd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当产生多个实例时<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> u1=<span class="keyword">new</span> User(<span class="comment">/* 一些参数 */</span>);</span><br><span class="line"><span class="keyword">var</span> u2=<span class="keyword">new</span> User(<span class="comment">/* 一些参数 */</span>);</span><br><span class="line"><span class="keyword">var</span> u3=<span class="keyword">new</span> User(<span class="comment">/* 一些参数 */</span>);</span><br></pre></td></tr></table></figure></p>
+<p>其内存结构图<br><img src="http://images2015.cnblogs.com/blog/156514/201606/156514-20160614181105838-174623671.jpg" alt="方法存储在原型中" title="1465889688705.jpg"></p>
+<h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><p>可以看出，将方法存储在原型中，使其可以被所有的实例使用，而不需要给每个实例对象增加额外的属性。<br>将方法存储在实例对象中会优化查找速度，当使用如u1.toString()方法，不需要搜索原型链来查找toString的实现。但，现代的js引擎深度优化了原型查找，所以将方法复制到实例对象并不一定保证速度有明显的提升。而且实例方法比起原型方法肯定会占用更多的内存。</p>
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>将方法存储在实例对象中将创建该函数的多个副本，因为每个实例对象都有一份副本</li>
+<li>将方法存储于原型中优于存储在实例对象中</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://cedrusweng.github.io/2016/06/14/第34条：在原型中存储方法/" data-id="cipfax00f000di8cis9r5xh0i" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/06/14/第35条：使用闭包存储私有数据/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          第35条：使用闭包存储私有数据
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/06/13/第33条：使构造函数与new操作符无关/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">第33条：使构造函数与new操作符无关</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/聊一聊HTML标签/">聊一聊HTML标签</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/编写高质量javascript代码的68条有效方法/" style="font-size: 20px;">编写高质量javascript代码的68条有效方法</a> <a href="/tags/聊一聊HTML标签/" style="font-size: 10px;">聊一聊HTML标签</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/06/14/第35条：使用闭包存储私有数据/">第35条：使用闭包存储私有数据</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/14/第34条：在原型中存储方法/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/13/第33条：使构造函数与new操作符无关/">第33条：使构造函数与new操作符无关</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/">第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性</a>
+          </li>
+        
+          <li>
+            <a href="/2016/06/13/第32条：始终不要修改__proto__属性/">第32条：始终不要修改__proto__属性</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 wengxuesong<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/scrollFrame" class="mobile-nav-link">scrollFrame</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
