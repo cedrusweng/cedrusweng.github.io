@@ -55,7 +55,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://cedrusweng.github.io"></form>
@@ -112,52 +112,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/06/13/第33条：使构造函数与new操作符无关/" data-id="cipetv51b0008toci22420smx" class="article-share-link">Delen</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-第32条：始终不要修改__proto__属性" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/06/13/第32条：始终不要修改__proto__属性/" class="article-date">
-  <time datetime="2016-06-13T05:52:38.230Z" itemprop="datePublished">2016-06-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/13/第32条：始终不要修改__proto__属性/">第32条：始终不要修改__proto__属性</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>proto</strong>属性很特殊，它提供了Object.getPrototypeOf方法所不具备的额外能力，即修改对象原型链接的能力。避免修改<strong>proto</strong>属性的最明显的原因是可移植性的问题。并不是所有的平台都支持修改对象原型的特性，所以无法编写可移植的代码。<br>避免修改<strong>proto</strong>属性的另一个原因是性能问题。所有现代的js引擎都深度优化了获取和设置对象属性的行为，因为这些都是一些常见的js操作。这些优化都是基于引擎对对象结构的认识上。当更改了对象的内部结构（如添加或删除该对象或其原型链中的对象的属性），将会使一些优化失效。修改<strong>proto</strong>属性实际上改变了继承结构本身，这可能是最具破坏性的修改。<br>避免修改<strong>proto</strong>属性的最大的原因是为了保持行为的可预测性。对象的原型链通过其一套确定的属性及属性值来定义它的行为。修改对象的原型链就像对其进行“大脑移植”，这会交换对象的整个层次结构。在某些情况下这样的操作可能是有用的，但是保持继承层次结构的相对稳定是一个基本的原则。<br>可以使用ES5中的Object.create函数来创建一个具有自定义原型链的新对象。对于不支持ES5的运行环境，可以使用兼容代码。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="built_in">Object</span>.create === <span class="string">'undefined'</span>)&#123;</span><br><span class="line">    <span class="built_in">Object</span>.create=<span class="function"><span class="keyword">function</span>(<span class="params">prototype</span>)</span>&#123;</span><br><span class="line">       <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">       F.prototype=prototype;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
-<li>始终不要修改对象的<strong>proto</strong>属性</li>
-<li>使用Object.create函数给新对象设置自定义的原型</li>
-</ul>
-<h2 id="附录一：proto的语法"><a href="#附录一：proto的语法" class="headerlink" title="附录一：proto的语法"></a>附录一：<strong>proto</strong>的语法</h2><h3 id="浏览器兼容性"><a href="#浏览器兼容性" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h3><p>桌面浏览器<br>Chrome  Firefox (Gecko) Internet Explorer Opera Safari<br>(Yes)    (Yes)               11           (Yes) (Yes)<br>移动端<br>Android Chrome for Android  Firefox Mobile (Gecko)  IE Mobile Opera Mobile  Safari Mobile<br>(Yes) (Yes) (Yes) (Yes) (Yes) (Yes)</p>
-<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> shape = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> Circle();</span><br><span class="line"><span class="keyword">in</span> real code.</span><br><span class="line">shape.__proto__ = circle;</span><br><span class="line"><span class="built_in">console</span>.log(shape.__proto__ === circle); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> shape = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> p = &#123;</span><br><span class="line">    a: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'aaa'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">shape.prototype.__proto__ = p;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> shape();</span><br><span class="line"></span><br><span class="line">circle.a();<span class="comment">//aaa</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(shape.prototype === circle.__proto__);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> shape = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> p = &#123;</span><br><span class="line">    a: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'a'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> shape();</span><br><span class="line">circle.__proto__ = p;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">circle.a(); <span class="comment">//  a</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(shape.prototype === circle.__proto__);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">test.prototype.myname = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'myname'</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> test()</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a.__proto__ === test.prototype);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">a.myname();<span class="comment">//myname</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fn = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br><span class="line">fn.prototype.myname = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'myname'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    __proto__: fn.prototype</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj.myname();<span class="comment">//myname</span></span><br></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/06/13/第32条：始终不要修改__proto__属性/" data-id="cipetv5160004tocih1ni85v6" class="article-share-link">Delen</a>
+      <a data-url="http://cedrusweng.github.io/2016/06/13/第33条：使构造函数与new操作符无关/" data-id="cipetx57b0009jscikb5zwnis" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
@@ -202,7 +157,52 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/" data-id="cipetv5170006tocing2ak7jb" class="article-share-link">Delen</a>
+      <a data-url="http://cedrusweng.github.io/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/" data-id="cipetx5750006jscii9pu9tbb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-第32条：始终不要修改__proto__属性" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/06/13/第32条：始终不要修改__proto__属性/" class="article-date">
+  <time datetime="2016-06-13T05:52:38.230Z" itemprop="datePublished">2016-06-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/06/13/第32条：始终不要修改__proto__属性/">第32条：始终不要修改__proto__属性</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>proto</strong>属性很特殊，它提供了Object.getPrototypeOf方法所不具备的额外能力，即修改对象原型链接的能力。避免修改<strong>proto</strong>属性的最明显的原因是可移植性的问题。并不是所有的平台都支持修改对象原型的特性，所以无法编写可移植的代码。<br>避免修改<strong>proto</strong>属性的另一个原因是性能问题。所有现代的js引擎都深度优化了获取和设置对象属性的行为，因为这些都是一些常见的js操作。这些优化都是基于引擎对对象结构的认识上。当更改了对象的内部结构（如添加或删除该对象或其原型链中的对象的属性），将会使一些优化失效。修改<strong>proto</strong>属性实际上改变了继承结构本身，这可能是最具破坏性的修改。<br>避免修改<strong>proto</strong>属性的最大的原因是为了保持行为的可预测性。对象的原型链通过其一套确定的属性及属性值来定义它的行为。修改对象的原型链就像对其进行“大脑移植”，这会交换对象的整个层次结构。在某些情况下这样的操作可能是有用的，但是保持继承层次结构的相对稳定是一个基本的原则。<br>可以使用ES5中的Object.create函数来创建一个具有自定义原型链的新对象。对于不支持ES5的运行环境，可以使用兼容代码。<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">typeof</span> <span class="built_in">Object</span>.create === <span class="string">'undefined'</span>)&#123;</span><br><span class="line">    <span class="built_in">Object</span>.create=<span class="function"><span class="keyword">function</span>(<span class="params">prototype</span>)</span>&#123;</span><br><span class="line">       <span class="function"><span class="keyword">function</span> <span class="title">F</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line">       F.prototype=prototype;</span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> F();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h2><ul>
+<li>始终不要修改对象的<strong>proto</strong>属性</li>
+<li>使用Object.create函数给新对象设置自定义的原型</li>
+</ul>
+<h2 id="附录一：proto的语法"><a href="#附录一：proto的语法" class="headerlink" title="附录一：proto的语法"></a>附录一：<strong>proto</strong>的语法</h2><h3 id="浏览器兼容性"><a href="#浏览器兼容性" class="headerlink" title="浏览器兼容性"></a>浏览器兼容性</h3><p>桌面浏览器<br>Chrome  Firefox (Gecko) Internet Explorer Opera Safari<br>(Yes)    (Yes)               11           (Yes) (Yes)<br>移动端<br>Android Chrome for Android  Firefox Mobile (Gecko)  IE Mobile Opera Mobile  Safari Mobile<br>(Yes) (Yes) (Yes) (Yes) (Yes) (Yes)</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> shape = &#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> Circle();</span><br><span class="line"><span class="keyword">in</span> real code.</span><br><span class="line">shape.__proto__ = circle;</span><br><span class="line"><span class="built_in">console</span>.log(shape.__proto__ === circle); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> shape = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line"><span class="keyword">var</span> p = &#123;</span><br><span class="line">    a: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'aaa'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">shape.prototype.__proto__ = p;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> shape();</span><br><span class="line"></span><br><span class="line">circle.a();<span class="comment">//aaa</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(shape.prototype === circle.__proto__);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> shape = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> p = &#123;</span><br><span class="line">    a: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'a'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> circle = <span class="keyword">new</span> shape();</span><br><span class="line">circle.__proto__ = p;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">circle.a(); <span class="comment">//  a</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(shape.prototype === circle.__proto__);<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">test.prototype.myname = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'myname'</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> test()</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(a.__proto__ === test.prototype);<span class="comment">//true</span></span><br><span class="line"></span><br><span class="line">a.myname();<span class="comment">//myname</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//or</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> fn = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br><span class="line">fn.prototype.myname = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'myname'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">    __proto__: fn.prototype</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">obj.myname();<span class="comment">//myname</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://cedrusweng.github.io/2016/06/13/第32条：始终不要修改__proto__属性/" data-id="cipetx5790008jsciruiz5t4y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
@@ -266,7 +266,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/" data-id="cipetv51d0009tocidt7x8vwm" class="article-share-link">Delen</a>
+      <a data-url="http://cedrusweng.github.io/2016/06/13/第30条：理解prototype、getPrototypeOf和__ptoto__之间的不同/" data-id="cipetx5730004jscijvnkc58c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
@@ -349,7 +349,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/05/31/html-commet/" data-id="cipetv50r0000toci3x6aze3v" class="article-share-link">Delen</a>
+      <a data-url="http://cedrusweng.github.io/2016/05/31/html-commet/" data-id="cipetx56p0000jscixpf6ddmy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/聊一聊HTML标签/">聊一聊HTML标签</a></li></ul>
@@ -407,7 +407,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/05/30/html-pre/" data-id="cipetv5140003tocig3ludi2w" class="article-share-link">Delen</a>
+      <a data-url="http://cedrusweng.github.io/2016/05/30/html-pre/" data-id="cipetx5710003jsci3gb9loas" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/聊一聊HTML标签/">聊一聊HTML标签</a></li></ul>
@@ -454,7 +454,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://cedrusweng.github.io/2016/05/27/第15条：当心局部块函数声明笨拙的作用域/" data-id="cipetv50y0001toci793emk1b" class="article-share-link">Delen</a>
+      <a data-url="http://cedrusweng.github.io/2016/05/27/第15条：当心局部块函数声明笨拙的作用域/" data-id="cipetx56v0001jscipg82i04a" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li></ul>
@@ -476,7 +476,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Labels</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/编写高质量javascript代码的68条有效方法/">编写高质量javascript代码的68条有效方法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/聊一聊HTML标签/">聊一聊HTML标签</a></li></ul>
     </div>
@@ -495,7 +495,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archieven</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
     </div>
@@ -505,7 +505,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recente berichten</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -514,11 +514,11 @@
           </li>
         
           <li>
-            <a href="/2016/06/13/第32条：始终不要修改__proto__属性/">第32条：始终不要修改__proto__属性</a>
+            <a href="/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/">第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性</a>
           </li>
         
           <li>
-            <a href="/2016/06/13/第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性/">第31条：使用Object.getPrototypeOf函数而不要使用__proto__属性</a>
+            <a href="/2016/06/13/第32条：始终不要修改__proto__属性/">第32条：始终不要修改__proto__属性</a>
           </li>
         
           <li>
